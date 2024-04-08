@@ -37,16 +37,6 @@ public class BoardController {
         return "boards/writeForm";
     }
 
-    @GetMapping("/{boardId}")
-    public String board(@PathVariable("boardId") Long boardId, Model model) {
-
-
-        BoardDto findBoardDto = boardService.findByBoardId(boardId);
-        model.addAttribute("board", findBoardDto);
-
-        return "boards/board";
-    }
-
     @PostMapping("/write")
     public String writeBoard(@Validated @ModelAttribute("board") BoardSaveForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
@@ -59,6 +49,15 @@ public class BoardController {
 
         return null;
 
+    }
+
+    @GetMapping("/{boardId}")
+    public String board(@PathVariable("boardId") Long boardId, Model model) {
+
+        BoardDto findBoardDto = boardService.findByBoardId(boardId);
+        model.addAttribute("board", findBoardDto);
+
+        return "boards/board";
     }
 
 
