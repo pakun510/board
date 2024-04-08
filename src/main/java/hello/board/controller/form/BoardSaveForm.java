@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 @Data
 @NoArgsConstructor
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class BoardSaveForm {
 
     @NotEmpty
+    @Length(min = 2, max = 20)
     private String title;
 
     @NotEmpty

@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,4 +27,19 @@ public class BoardServiceImpl implements BoardService {
                 .content(savedBoard.getContent())
                 .build();
     }
+
+    @Override
+    public BoardDto findByBoardId(Long BoardId) {
+        Board findBoard = boardRepository.findById(BoardId).orElseThrow(IllegalArgumentException::new);
+
+        return BoardDto.builder()
+                .id(findBoard.getId())
+                .title(findBoard.getTitle())
+                .content(findBoard.getContent())
+                .build();
+
+    }
+
+
+
 }

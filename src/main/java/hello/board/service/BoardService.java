@@ -7,4 +7,6 @@ public interface BoardService {
 
     BoardDto saveBoard(BoardSaveForm form);
 
+    BoardDto findByBoardId(Long BoardId);
+
 }
