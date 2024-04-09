@@ -24,6 +24,7 @@
         </ul>
 
         <div class="col-md-3 text-end">
+            <!--<span><div th:text="${session.loginMember?.userId}"></div></span>-->
             <button type="button" class="btn btn-outline-primary me-2" th:text="#{button.login}"
                     onclick="location.href='../login/loginForm.html'"
                     th:onclick="|location.href='@{/login}'|">Login</button>

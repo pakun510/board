@@ -28,6 +28,7 @@
                 <th th:text="${board.id}"></th>
                 <td><a href="board.html" th:href="@{/boards/{boardId}(boardId = ${board.id})}" th:text="${board.title}">title</a></td>
                 <td th:text="${board.content}"></td>
+                <td th:text="${board.createdDate}"></td>
             </tr>
             </tbody>
         </table>

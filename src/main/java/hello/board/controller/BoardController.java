@@ -30,7 +30,7 @@ public class BoardController {
     public String boards(@PageableDefault(size = 20) Pageable pageable, Model model) {
 
         model.addAttribute("boards", boardRepository.findAll(pageable));
-
+        //TODO 날짜 포맷팅해야함.
         return "boards/boards";
     }
 

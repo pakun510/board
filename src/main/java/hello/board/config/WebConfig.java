@@ -1,4 +1,4 @@
-package hello.board;
+package hello.board.config;
 
 import hello.board.config.interceptor.LoginCheckInterceptor;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/", "/login", "/boards", "/members/join",
                         "/css/**", "/*.ico", "/error");
-
 
     }
 }
