@@ -1,13 +1,13 @@
 package hello.board.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,12 +23,11 @@ public class Member {
     private String password;
     private String username;
 
+    @OneToMany(mappedBy = "member")
+    private List<Board> boards = new ArrayList<>();
 
-    public static Member joinMember(String userId, String password, String username) {
-        return new Member(userId, password, username);
-    }
 
-    private Member(String userId, String password, String username) {
+    public Member(String userId, String password, String username) {
         this.userId = userId;
         this.password = password;
         this.username = username;

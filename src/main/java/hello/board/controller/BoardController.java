@@ -2,10 +2,14 @@ package hello.board.controller;
 
 import hello.board.controller.form.BoardSaveForm;
 import hello.board.dto.BoardDto;
+import hello.board.entity.Board;
 import hello.board.repository.BoardRepository;
 import hello.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,9 +27,9 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping
-    public String boards(Model model) {
+    public String boards(@PageableDefault(size = 20) Pageable pageable, Model model) {
 
-        model.addAttribute("boards", boardRepository.findAll());
+        model.addAttribute("boards", boardRepository.findAll(pageable));
 
         return "boards/boards";
     }
@@ -46,8 +50,10 @@ public class BoardController {
         }
 
         log.info("success={}", form);
+        BoardDto boardDto = boardService.saveBoard(form);
+        redirectAttributes.addAttribute("boardId", boardDto.getId());
 
-        return null;
+        return "redirect:/boards/{boardId}";
 
     }
 

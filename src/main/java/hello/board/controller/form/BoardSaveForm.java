@@ -1,6 +1,6 @@
 package hello.board.controller.form;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,11 +11,11 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 public class BoardSaveForm {
 
-    @NotEmpty
+    @NotBlank
     @Length(min = 2, max = 20)
     private String title;
 
-    @NotEmpty
+    @NotBlank
     private String content;
 
 }

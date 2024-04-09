@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/layoutFile :: layout(~{::title}, ~{::section})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>회원가입 페이지</title>
+</head>
+<body>
+<section>
+    <div class="py-5 text-center">
+        <h2>회원 가입</h2>
+    </div>
+    <h4 class="mb-3">회원 정보 입력</h4>
+    <form action="#" th:action th:object="${member}" method="post">
+        <div class="mb-3">
+            <label for="username" class="form-label" th:text="#{label.member.username}">username</label>
+            <input type="text" class="form-control" id="username" th:field="*{username}">
+            <div class="field-error" th:errors="*{username}">
+                내용 오류
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="userId" class="form-label" th:text="#{label.member.userId}">userId</label>
+            <input type="text" class="form-control" id="userId" th:field="*{userId}">
+            <div class="field-error" th:errors="*{userId}">
+                제목 오류
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label" th:text="#{label.member.password}">password</label>
+            <input type="text" class="form-control" id="password" th:field="*{password}">
+            <div class="field-error" th:errors="*{password}">
+                내용 오류
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="confirmPassword" class="form-label" th:text="#{label.member.confirmPassword}">confirmPassword</label>
+            <input type="text" class="form-control" id="confirmPassword" th:field="*{confirmPassword}">
+            <div class="field-error" th:errors="*{confirmPassword}">
+                내용 오류
+            </div>
+        </div>
+        <div class="mb-3">
+            <ul class="nav justify-content-end">
+                <li class="nav-item">
+                    <button class="btn btn-primary" th:text="#{button.save}">Submit</button>
+                </li>
+            </ul>
+        </div>
+    </form>
+</section>
+</body>
+</html>

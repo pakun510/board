@@ -24,8 +24,12 @@
         </ul>
 
         <div class="col-md-3 text-end">
-            <button type="button" class="btn btn-outline-primary me-2" th:text="#{button.login}">Login</button>
-            <button type="button" class="btn btn-primary" th:text="#{button.sign-up}">Sign-up</button>
+            <button type="button" class="btn btn-outline-primary me-2" th:text="#{button.login}"
+                    onclick="location.href='../login/loginForm.html'"
+                    th:onclick="|location.href='@{/login}'|">Login</button>
+            <button type="button" class="btn btn-primary" th:text="#{button.sign-up}"
+                    onclick="location.href='../members/joinForm.html'"
+                    th:onclick="|location.href='@{/members/join}'|">Sign-up</button>
         </div>
     </header>
 
@@ -39,4 +43,3 @@
 </div>
 </body>
 </html>
-```

@@ -15,10 +15,16 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public void joinMember(MemberSaveForm form) {
-        //TODO 메소드 뭔가 괜찮은거 같긴한데 수정바람.
-        memberRepository.save(Member.joinMember(form.getUserId(), form.getPassword(), form.getUsername()));
+    public boolean existsMember(MemberSaveForm form) {
+        return memberRepository.existsByUserId(form.getUserId());
+    }
 
+    @Override
+    public void joinMember(MemberSaveForm form) {
+
+        Member savedMember = memberRepository.save(new Member(form.getUserId(), form.getPassword(), form.getUsername()));
+
+        //TODO 가입한 회원 리턴시켜서 보여주기 근데 굳이 그럴필요가 있는지 고려.
 
     }
 }

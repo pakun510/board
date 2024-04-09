@@ -7,21 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class MemberSaveForm {
+@AllArgsConstructor
+@Builder
+public class LoginForm {
 
     @NotBlank
     private String userId;
     @NotBlank
     private String password;
-    @NotBlank
-    private String confirmPassword;
-    @NotBlank
-    private String username;
 
-    public boolean passwordNotEqualsConfirm() {
-        return !password.equals(confirmPassword);
-    }
 }

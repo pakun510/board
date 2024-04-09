@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -18,6 +21,13 @@ public class Board extends BaseEntity {
 
     @Lob
     private String content;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId")
+    private Member member;
+
+    @OneToMany
+    private List<Comment> comments = new ArrayList<>();
 
     public Board(String title, String content) {
         this.title = title;
