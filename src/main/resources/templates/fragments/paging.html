@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a th:fragment="paging(pageNum, label, tooltip)" class="page-link"
+   th:href="@{'/boards?' + 'page=' + ${pageNum} + '&size=' + ${pageSize}}"
+   th:text="${label}" rel="tooltip">
+    Label
+</a>
+</body>
+</html>

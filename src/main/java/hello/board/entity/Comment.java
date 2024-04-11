@@ -1,11 +1,11 @@
 package hello.board.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,7 +18,11 @@ public class Comment extends BaseEntity {
 
     private String content;
 
+    @ManyToOne
+    private Comment parent;
 
+    @OneToMany
+    private List<Comment> child = new ArrayList<>();
 
 
 

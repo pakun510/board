@@ -1,10 +1,10 @@
 package hello.board.service;
 
 import hello.board.controller.form.LoginForm;
-import hello.board.dto.MemberDto;
+import hello.board.dto.MemberSessionDto;
 
 public interface LoginService {
 
-    MemberDto login(LoginForm form);
+    MemberSessionDto tryLogin(LoginForm form);
 
 }

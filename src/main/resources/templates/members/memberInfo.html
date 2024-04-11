@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/layoutFile :: layout(~{::title}, ~{::section})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>유저 페이지</title>
+</head>
+<body>
+<section>
+    <div class="container mt-5">
+        <!-- 유저 정보 카드 -->
+        <div class="card">
+            <div class="card-header">
+                User Profile
+            </div>
+            <div class="card-body">
+                <!-- 프로필 이미지 -->
+                <img src="https://via.placeholder.com/150" alt="Profile Image" class="profile-image mb-3">
+                <!-- 유저 정보 -->
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Name: John Doe</li>
+                    <li class="list-group-item">Email: johndoe@example.com</li>
+                    <li class="list-group-item">Phone: +1234567890</li>
+                    <li class="list-group-item">Address: 123 Main St, City, Country</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -3,7 +3,9 @@ package hello.board.service;
 import hello.board.controller.form.BoardSaveForm;
 import hello.board.dto.BoardDto;
 import hello.board.entity.Board;
+import hello.board.entity.Member;
 import hello.board.repository.BoardRepository;
+import hello.board.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,12 +20,16 @@ import java.util.Optional;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
-
+    private final MemberRepository memberRepository;
 
     @Override
     @Transactional
-    public BoardDto saveBoard(BoardSaveForm form) {
-        Board savedBoard = boardRepository.save(new Board(form.getTitle(), form.getContent()));
+    public BoardDto saveBoard(Long memberId, BoardSaveForm form) {
+
+        Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
+        Board board = new Board(form.getTitle(), form.getContent());
+        member.writeBoard(board);
+        Board savedBoard = boardRepository.save(board);
 
         return BoardDto.builder()
                 .id(savedBoard.getId())

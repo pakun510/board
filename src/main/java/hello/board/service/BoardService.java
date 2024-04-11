@@ -5,7 +5,7 @@ import hello.board.dto.BoardDto;
 
 public interface BoardService {
 
-    BoardDto saveBoard(BoardSaveForm form);
+    BoardDto saveBoard(Long memberId, BoardSaveForm form);
 
     BoardDto findByBoardId(Long BoardId);
 

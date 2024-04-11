@@ -23,7 +23,7 @@ public class Member {
     private String password;
     private String username;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boards = new ArrayList<>();
 
 
@@ -32,4 +32,11 @@ public class Member {
         this.password = password;
         this.username = username;
     }
+
+    public void writeBoard(Board board) {
+        boards.add(board);
+        board.setMember(this);
+    }
+
+
 }

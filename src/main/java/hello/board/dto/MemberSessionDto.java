@@ -5,10 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class MemberDto {
-
+public class MemberSessionDto {
     private Long id;
-    private String userId;
     private String username;
-
 }

@@ -17,7 +17,7 @@ public class TestDataInit {
 
     @PostConstruct
     public void init() {
-        for (int i = 0; i < 50; i++) {
+        for (int i = 1; i <= 30; i++) {
             boardRepository.save(new Board("제목"+i, "내용"+i));
         }
 

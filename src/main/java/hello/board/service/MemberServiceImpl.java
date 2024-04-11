@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -26,5 +28,10 @@ public class MemberServiceImpl implements MemberService {
 
         //TODO 가입한 회원 리턴시켜서 보여주기 근데 굳이 그럴필요가 있는지 고려.
 
+    }
+
+    @Override
+    public Optional<Member> findUserByUserId(Long userId) {
+        return memberRepository.findById(userId);
     }
 }

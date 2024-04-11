@@ -7,9 +7,61 @@
 </head>
 <body>
 <section>
-<p th:text="${board.id}"></p>
-<p th:text="${board.title}"></p>
-<p th:text="${board.content}"></p>
+    <div class="container mt-5">
+        <!-- 게시글 내용 -->
+        <div class="card">
+            <div class="card-header" th:text="${board.title}">
+                게시글 제목
+            </div>
+            <div class="card-body" th:text="${board.content}">
+                <p class="card-text">게시글 내용 Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque quisquam dolor voluptates quas quos minima dolores natus adipisci aliquid nulla!</p>
+            </div>
+            <div class="card-footer text-muted" th:text="|작성자 ${board.id}|">
+                작성자: John Doe | 작성일: 2024-04-11
+            </div>
+        </div>
+    </div>
+    <!-- 댓글 -->
+    <div class="card mt-3">
+        <div class="card-header">
+            댓글
+        </div>
+        <ul class="list-group list-group-flush">
+            <!-- 댓글 아이템 -->
+            <li class="list-group-item">
+                <strong>Commenter:</strong> 댓글 내용 Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </li>
+            <li class="list-group-item">
+                <strong>Commenter:</strong> 댓글 내용 Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </li>
+        </ul>
+    </div>
+    <!-- 댓글 작성 폼 -->
+    <div class="card mt-3">
+        <div class="card-header">
+            댓글 작성하기
+        </div>
+        <div class="card-body">
+            <form>
+                <div class="form-group">
+                    <label for="commenterName">이름</label>
+                    <input type="text" class="form-control" id="commenterName" placeholder="이름을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label for="commentContent">댓글 내용</label>
+                    <textarea class="form-control" id="commentContent" rows="3" placeholder="댓글을 입력하세요"></textarea>
+                </div>
+                <div class="form-group mt-2">
+                    <ul class="nav justify-content-end">
+                        <li class="nav-item">
+                            <button type="submit" class="btn btn-primary">댓글 작성</button>
+                        </li>
+                    </ul>
+                </div>
+
+            </form>
+        </div>
+    </div>
 </section>
 </body>
 </html>

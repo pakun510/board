@@ -1,7 +1,7 @@
 package hello.board.service;
 
 import hello.board.controller.form.LoginForm;
-import hello.board.dto.MemberDto;
+import hello.board.dto.MemberSessionDto;
 import hello.board.entity.Member;
 import hello.board.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +14,13 @@ public class LoginServiceImpl implements LoginService {
     private final MemberRepository memberRepository;
 
     @Override
-    public MemberDto login(LoginForm form) {
+    public MemberSessionDto tryLogin(LoginForm form) {
 
         Member findMember = memberRepository.findByUserIdAndPassword(form.getUserId(), form.getPassword());
 
-        return MemberDto.builder()
+        return findMember == null ? null : MemberSessionDto.builder()
                 .id(findMember.getId())
-                .userId(findMember.getUserId())
                 .username(findMember.getUsername())
                 .build();
-
     }
 }

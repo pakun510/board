@@ -1,18 +1,27 @@
 package hello.board.controller;
 
 import hello.board.controller.form.MemberSaveForm;
+import hello.board.dto.MemberSessionDto;
+import hello.board.entity.Member;
+import hello.board.repository.MemberRepository;
 import hello.board.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
+import java.util.Optional;
+
+import static hello.board.config.SessionConst.LOGIN_MEMBER;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @GetMapping("/join")
     public String joinForm(@ModelAttribute("member") MemberSaveForm form) {
@@ -47,7 +57,30 @@ public class MemberController {
         return "redirect:/login";
     }
 
+    @GetMapping("/{userId}")
+    public String memberInfo(@PathVariable("userId") Long userId, Model model, HttpServletResponse response) throws IOException {
+        log.info("userId={}", userId);
 
+        Optional<Member> findMember = memberService.findUserByUserId(userId);
+        if (findMember.isPresent()) {
+            model.addAttribute("member", findMember.get());
+            return "members/memberInfo";
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return null;
+        }
+
+    }
+
+    @GetMapping("/delete")
+    public String delete(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        MemberSessionDto memberSessionDto = (MemberSessionDto) session.getAttribute(LOGIN_MEMBER);
+
+        memberRepository.deleteById(memberSessionDto.getId());
+
+        return "redirect:/";
+    }
 
 
 }

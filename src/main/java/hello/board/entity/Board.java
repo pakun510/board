@@ -29,6 +29,9 @@ public class Board extends BaseEntity {
     @OneToMany
     private List<Comment> comments = new ArrayList<>();
 
+    //TODO 계층형은 아닌 관계 카테고리 구분
+//    private Area area;
+
     public Board(String title, String content) {
         this.title = title;
         this.content = content;

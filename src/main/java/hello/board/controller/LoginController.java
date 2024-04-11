@@ -2,7 +2,7 @@ package hello.board.controller;
 
 import hello.board.config.SessionConst;
 import hello.board.controller.form.LoginForm;
-import hello.board.dto.MemberDto;
+import hello.board.dto.MemberSessionDto;
 import hello.board.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -35,10 +35,10 @@ public class LoginController {
         if (bindingResult.hasErrors()) {
             return "login/loginForm";
         }
-        //TODO 나중에 구현할것.
-        MemberDto loginMember = loginService.login(form);
+        //TODO 나중에 구현할것. 뭐를?
+        MemberSessionDto loginMember = loginService.tryLogin(form);
         if (loginMember == null) {
-            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
+            bindingResult.reject("loginFail");
             return "login/loginForm";
         }
 
@@ -60,5 +60,9 @@ public class LoginController {
         }
         return "redirect:/";
     }
+
+
+
+
 
 }
