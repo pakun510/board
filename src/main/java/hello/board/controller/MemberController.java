@@ -66,7 +66,7 @@ public class MemberController {
             model.addAttribute("member", findMember.get());
             return "members/memberInfo";
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
 

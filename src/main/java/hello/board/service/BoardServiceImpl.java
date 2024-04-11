@@ -35,17 +35,19 @@ public class BoardServiceImpl implements BoardService {
                 .id(savedBoard.getId())
                 .title(savedBoard.getTitle())
                 .content(savedBoard.getContent())
+                .username(savedBoard.getMember().getUsername())
                 .build();
     }
 
     @Override
     public BoardDto findByBoardId(Long BoardId) {
-        Board findBoard = boardRepository.findById(BoardId).orElseThrow(IllegalArgumentException::new);
+        Board findBoard = boardRepository.findById(BoardId).orElse(null);
 
-        return BoardDto.builder()
+        return findBoard == null ? null : BoardDto.builder()
                 .id(findBoard.getId())
                 .title(findBoard.getTitle())
                 .content(findBoard.getContent())
+                .username(findBoard.getMember().getUsername())
                 .build();
 
     }

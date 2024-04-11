@@ -7,6 +7,7 @@ import hello.board.entity.Board;
 import hello.board.repository.BoardRepository;
 import hello.board.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
 
 import static hello.board.config.SessionConst.LOGIN_MEMBER;
 
@@ -35,6 +38,7 @@ public class BoardController {
     @GetMapping
     public String boards(Model model, @RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "size", defaultValue = "20") int size) {
 
+        //TODO initialize proxy - no session 해결해야함
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Board> boardPage = boardRepository.findAll(pageable);
         model.addAttribute("boards", boardPage.getContent());
@@ -72,12 +76,17 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}")
-    public String board(@PathVariable("boardId") Long boardId, Model model) {
+    public String board(@PathVariable("boardId") Long boardId, Model model, HttpServletResponse response) throws IOException {
 
         BoardDto findBoardDto = boardService.findByBoardId(boardId);
-        model.addAttribute("board", findBoardDto);
+        if (findBoardDto != null) {
 
-        return "boards/board";
+            model.addAttribute("board", findBoardDto);
+            return "boards/board";
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
     }
 
     //TODO 지도API, 이미지,

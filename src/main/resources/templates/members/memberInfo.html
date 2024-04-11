@@ -11,7 +11,12 @@
         <!-- 유저 정보 카드 -->
         <div class="card">
             <div class="card-header">
-                User Profile
+                <ul class="nav justify-content-between">
+                    <li class="nav-item">User Profile</li>
+                    <li class="nav-item">
+                        <a th:if="${member.id} == ${session.loginMember?.id}" class="btn btn-primary" href="#" role="button">Update Profile</a>
+                    </li>
+                </ul>
             </div>
             <div class="card-body">
                 <!-- 프로필 이미지 -->
