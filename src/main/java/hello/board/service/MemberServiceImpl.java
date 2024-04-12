@@ -17,21 +17,18 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public boolean existsMember(MemberSaveForm form) {
-        return memberRepository.existsByUserId(form.getUserId());
+    public boolean existsMember(String userId) {
+        return memberRepository.existsByUserId(userId);
     }
 
     @Override
     public void joinMember(MemberSaveForm form) {
-
         Member savedMember = memberRepository.save(new Member(form.getUserId(), form.getPassword(), form.getUsername()));
-
-        //TODO 가입한 회원 리턴시켜서 보여주기 근데 굳이 그럴필요가 있는지 고려.
-
     }
 
     @Override
     public Optional<Member> findUserByUserId(Long userId) {
+        //바로 memberRepository 로 접근하는게 더 나은 방법일수도.
         return memberRepository.findById(userId);
     }
 }

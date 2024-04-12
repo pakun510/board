@@ -12,9 +12,11 @@
         <div class="card">
             <div class="card-header">
                 <ul class="nav justify-content-between">
-                    <li class="nav-item">User Profile</li>
+                    <li class="nav-item align-self-center">User Profile</li>
                     <li class="nav-item">
-                        <a th:if="${member.id} == ${session.loginMember?.id}" class="btn btn-primary" href="#" role="button">Update Profile</a>
+                        <a th:if="${member.id} == ${session.loginMember?.id}" class="btn btn-primary"
+                           href="memberInfo.html" th:href="@{/member/details}"
+                           role="button">Update Profile</a>
                     </li>
                 </ul>
             </div>
@@ -23,7 +25,7 @@
                 <img src="https://via.placeholder.com/150" alt="Profile Image" class="profile-image mb-3">
                 <!-- 유저 정보 -->
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Name: John Doe</li>
+                    <li class="list-group-item" th:text="|Name: ${member.username}|">Name: John Doe</li>
                     <li class="list-group-item">Email: johndoe@example.com</li>
                     <li class="list-group-item">Phone: +1234567890</li>
                     <li class="list-group-item">Address: 123 Main St, City, Country</li>

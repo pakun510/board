@@ -30,7 +30,7 @@ class MemberServiceImplTest {
                 .password("1234")
                 .confirmPassword("1234")
                 .build();
-        boolean existsMember = memberService.existsMember(member2);
+        boolean existsMember = memberService.existsMember(member2.getUserId());
 
         //then
         assertThat(existsMember).isTrue();

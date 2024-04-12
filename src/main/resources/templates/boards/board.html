@@ -10,13 +10,20 @@
     <div class="container mt-5">
         <!-- 게시글 내용 -->
         <div class="card">
-            <div class="card-header" th:text="${board.title}">
-                게시글 제목
+            <div class="card-header">
+                <ul class="nav justify-content-between">
+                    <li class="nav-item align-self-center" th:text="${board.title}">Board Title</li>
+                    <li class="nav-item">
+                        <a th:if="${board.member.id} == ${session.loginMember?.id}" class="btn btn-primary"
+                           href="editForm.html" th:href="@{/boards/{boardId}/edit(boardId = ${board.id})}"
+                           role="button">Update Board</a>
+                    </li>
+                </ul>
             </div>
             <div class="card-body" th:text="${board.content}">
                 <p class="card-text">게시글 내용 Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque quisquam dolor voluptates quas quos minima dolores natus adipisci aliquid nulla!</p>
             </div>
-            <div class="card-footer text-muted" th:text="|작성자 ${board.username}|">
+            <div class="card-footer text-muted" th:text="|작성자 ${board.member.username}|">
                 작성자: John Doe | 작성일: 2024-04-11
             </div>
         </div>

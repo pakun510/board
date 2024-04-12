@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface MemberService {
 
 
-    boolean existsMember(MemberSaveForm form);
+    boolean existsMember(String userId);
     void joinMember(MemberSaveForm form);
 
     Optional<Member> findUserByUserId(Long userId);

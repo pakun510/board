@@ -26,15 +26,15 @@ class BoardServiceTest {
         //given
         Member member = new Member("userid", "1234", "saveTest");
         Long memberId = memberRepository.save(member).getId();
-        BoardDto boardDto = boardService.saveBoard(memberId, new BoardSaveForm("TestTitle", "TestContent"));
+        Board board = boardService.saveBoard(memberId, new BoardSaveForm("TestTitle", "TestContent"));
 
         //when
-        Board findBoard = boardRepository.findById(boardDto.getId()).get();
+        Board findBoard = boardRepository.findById(board.getId()).get();
 
         //then
-        assertThat(findBoard.getId()).isEqualTo(boardDto.getId());
-        assertThat(findBoard.getTitle()).isEqualTo(boardDto.getTitle());
-        assertThat(findBoard.getContent()).isEqualTo(boardDto.getContent());
+        assertThat(findBoard.getId()).isEqualTo(board.getId());
+        assertThat(findBoard.getTitle()).isEqualTo(board.getTitle());
+        assertThat(findBoard.getContent()).isEqualTo(board.getContent());
     }
 
 

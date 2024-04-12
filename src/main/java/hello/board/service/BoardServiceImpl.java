@@ -1,7 +1,6 @@
 package hello.board.service;
 
 import hello.board.controller.form.BoardSaveForm;
-import hello.board.dto.BoardDto;
 import hello.board.entity.Board;
 import hello.board.entity.Member;
 import hello.board.repository.BoardRepository;
@@ -10,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,34 +21,23 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public BoardDto saveBoard(Long memberId, BoardSaveForm form) {
+    public Board saveBoard(Long memberId, BoardSaveForm form) {
 
         Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
         Board board = new Board(form.getTitle(), form.getContent());
         member.writeBoard(board);
-        Board savedBoard = boardRepository.save(board);
 
-        return BoardDto.builder()
-                .id(savedBoard.getId())
-                .title(savedBoard.getTitle())
-                .content(savedBoard.getContent())
-                .username(savedBoard.getMember().getUsername())
-                .build();
+        return boardRepository.save(board);
     }
 
     @Override
-    public BoardDto findByBoardId(Long BoardId) {
-        Board findBoard = boardRepository.findById(BoardId).orElse(null);
+    @Transactional
+    public void editBoard(Long boardId, BoardSaveForm form) {
 
-        return findBoard == null ? null : BoardDto.builder()
-                .id(findBoard.getId())
-                .title(findBoard.getTitle())
-                .content(findBoard.getContent())
-                .username(findBoard.getMember().getUsername())
-                .build();
+        Board board = boardRepository.findById(boardId).orElseThrow(IllegalArgumentException::new);
+        board.edit(form.getTitle(), form.getContent());
 
     }
-
 
 
 }

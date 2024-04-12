@@ -43,7 +43,7 @@ public class MemberController {
             //TODO 메세지 국제화 수정, 입력한 데이터 다시 리턴 수정
             bindingResult.addError(new FieldError("member", "confirmPassword", "비밀번호가 일치하지 않습니다."));
         }
-        if (memberService.existsMember(form)) {
+        if (memberService.existsMember(form.getUserId())) {
             //TODO 메세지 국제화 수정, 입력한 데이터 다시 리턴 수정
             bindingResult.addError(new FieldError("member", "userId", "이미 존재하는 아이디입니다."));
         }

@@ -12,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.io.IOException;
+import java.util.Optional;
+
 import static hello.board.config.SessionConst.LOGIN_MEMBER;
 
 @Controller
@@ -22,15 +25,20 @@ public class MemberPrivateController {
     private final MemberRepository memberRepository;
 
     @GetMapping("member/details")
-    public String myDetailsInfo(Model model, HttpServletRequest request, HttpServletResponse response) {
+    public String myDetailsInfo(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         HttpSession session = request.getSession(false);
         MemberSessionDto loginMember = (MemberSessionDto) session.getAttribute(LOGIN_MEMBER);
 
-        Member findMember = memberRepository.findById(loginMember.getId()).orElseThrow(IllegalArgumentException::new);
-        model.addAttribute("member", findMember);
+        Optional<Member> findMemberOptional = memberRepository.findById(loginMember.getId());
+        if (findMemberOptional.isPresent()) {
+            model.addAttribute("member", findMemberOptional.get());
+            return "members/myDetailsInfo";
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
 
-        return "members/myDetailsInfo";
 
     }
 }

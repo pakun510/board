@@ -3,12 +3,12 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>글작성 페이지</title>
+    <title>글수정 페이지</title>
 </head>
 <body>
 <section>
     <div class="py-5 text-center">
-        <h2>글 작성</h2>
+        <h2>글 수정</h2>
     </div>
     <form action="board.html" th:action th:object="${board}" method="post">
         <div class="mb-3">
@@ -28,7 +28,7 @@
         <div class="mb-3">
             <ul class="nav justify-content-end">
                 <li class="nav-item">
-                    <button class="btn btn-primary" th:text="#{button.write}">Submit</button>
+                    <button class="btn btn-primary" th:text="#{button.edit}">Submit</button>
                 </li>
             </ul>
         </div>

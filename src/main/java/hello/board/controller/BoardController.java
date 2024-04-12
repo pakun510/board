@@ -1,7 +1,6 @@
 package hello.board.controller;
 
 import hello.board.controller.form.BoardSaveForm;
-import hello.board.dto.BoardDto;
 import hello.board.dto.MemberSessionDto;
 import hello.board.entity.Board;
 import hello.board.repository.BoardRepository;
@@ -14,15 +13,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static hello.board.config.SessionConst.LOGIN_MEMBER;
 
@@ -36,11 +36,19 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping
-    public String boards(Model model, @RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "size", defaultValue = "20") int size) {
+    public String boards(Model model,
+                         @RequestParam(name = "keyword", required = false) String keyword,
+                         @RequestParam(name = "page", defaultValue = "1") int page,
+                         @RequestParam(name = "size", defaultValue = "20") int size) {
+        log.info("keyword={}", keyword);
+        log.info("page={}", page);
+        log.info("size={}", size);
 
-        //TODO initialize proxy - no session 해결해야함
+        //TODO 제목만 검색은 완료, A 또는 B 검색 수정필요
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Board> boardPage = boardRepository.findAll(pageable);
+        Page<Board> boardPage = boardRepository.findAllWithMemberAndContainsKeyword(keyword, pageable);
+
+        model.addAttribute("keyword", keyword);
         model.addAttribute("boards", boardPage.getContent());
         model.addAttribute("currentPage", boardPage.getNumber() + 1);
         model.addAttribute("totalItems", boardPage.getTotalElements());
@@ -58,18 +66,18 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String writeBoard(@Validated @ModelAttribute("board") BoardSaveForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+    public String writeBoard(@Validated @ModelAttribute("board") BoardSaveForm form, BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "boards/writeForm";
         }
 
-        HttpSession session = request.getSession(false);
-        MemberSessionDto memberSessionDto = (MemberSessionDto) session.getAttribute(LOGIN_MEMBER);
+        MemberSessionDto memberSessionDto = getMemberSessionDto(request);
 
         log.info("success={}", form);
-        BoardDto boardDto = boardService.saveBoard(memberSessionDto.getId(), form);
-        redirectAttributes.addAttribute("boardId", boardDto.getId());
+        Board savedBoard = boardService.saveBoard(memberSessionDto.getId(), form);
+        redirectAttributes.addAttribute("boardId", savedBoard.getId());
 
         return "redirect:/boards/{boardId}";
 
@@ -78,16 +86,72 @@ public class BoardController {
     @GetMapping("/{boardId}")
     public String board(@PathVariable("boardId") Long boardId, Model model, HttpServletResponse response) throws IOException {
 
-        BoardDto findBoardDto = boardService.findByBoardId(boardId);
-        if (findBoardDto != null) {
-
-            model.addAttribute("board", findBoardDto);
+        Optional<Board> findBoardOptional = boardRepository.findByIdJoinFetchMember(boardId);
+        if (findBoardOptional.isPresent()) {
+            model.addAttribute("board", findBoardOptional.get());
             return "boards/board";
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
     }
+
+    @GetMapping("/{boardId}/edit")
+    public String editForm(@PathVariable("boardId") Long boardId, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        Optional<Board> findBoardOptional = boardRepository.findByIdJoinFetchMember(boardId);
+        if (findBoardOptional.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+
+        MemberSessionDto memberSessionDto = getMemberSessionDto(request);
+        Board findBoard = findBoardOptional.get();
+
+        if (!memberSessionDto.getId().equals(findBoard.getMember().getId())) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return null;
+        }
+
+        model.addAttribute("board", findBoard);
+        return "boards/editForm";
+    }
+
+
+
+    @PostMapping("/{boardId}/edit")
+    public String editBoard(@PathVariable("boardId") Long boardId, @Validated @ModelAttribute("board") BoardSaveForm form, BindingResult bindingResult,
+                            RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            return "boards/editForm";
+        }
+        Optional<Board> findBoardOptional = boardRepository.findByIdJoinFetchMember(boardId);
+        if (findBoardOptional.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+
+        MemberSessionDto memberSessionDto = getMemberSessionDto(request);
+        Board findBoard = findBoardOptional.get();
+
+        if (!memberSessionDto.getId().equals(findBoard.getMember().getId())) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return null;
+        }
+
+        boardService.editBoard(boardId, form);
+
+        redirectAttributes.addAttribute("boardId", boardId);
+        return "redirect:/boards/{boardId}";
+    }
+
+    private static MemberSessionDto getMemberSessionDto(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        return (MemberSessionDto) session.getAttribute(LOGIN_MEMBER);
+    }
+
 
     //TODO 지도API, 이미지,
 }

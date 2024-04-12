@@ -17,10 +17,12 @@ public class TestDataInit {
 
     @PostConstruct
     public void init() {
-        for (int i = 1; i <= 200; i++) {
-            boardRepository.save(new Board("제목"+i, "내용"+i));
-        }
         Member member = memberRepository.save(new Member("test", "1234", "testUser"));
+        for (int i = 1; i <= 200; i++) {
+            Board board = new Board("제목" + i, "내용" + i);
+            board.setMember(member);
+            boardRepository.save(board);
+        }
 
 
     }
