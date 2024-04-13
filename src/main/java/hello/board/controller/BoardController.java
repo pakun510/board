@@ -39,7 +39,7 @@ public class BoardController {
     public String boards(Model model,
                          @RequestParam(name = "keyword", required = false) String keyword,
                          @RequestParam(name = "page", defaultValue = "1") int page,
-                         @RequestParam(name = "size", defaultValue = "20") int size) {
+                         @RequestParam(name = "size", defaultValue = "10") int size) {
         log.info("keyword={}", keyword);
         log.info("page={}", page);
         log.info("size={}", size);

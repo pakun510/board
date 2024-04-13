@@ -78,6 +78,7 @@ public class MemberController {
         MemberSessionDto memberSessionDto = (MemberSessionDto) session.getAttribute(LOGIN_MEMBER);
 
         memberRepository.deleteById(memberSessionDto.getId());
+        session.invalidate();
 
         return "redirect:/";
     }
