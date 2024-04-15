@@ -61,7 +61,7 @@ public class MemberController {
     public String memberInfo(@PathVariable("userId") Long userId, Model model, HttpServletResponse response) throws IOException {
         log.info("userId={}", userId);
 
-        Optional<Member> findMember = memberService.findUserByUserId(userId);
+        Optional<Member> findMember = memberRepository.findById(userId);
         if (findMember.isPresent()) {
             model.addAttribute("member", findMember.get());
             return "members/memberInfo";

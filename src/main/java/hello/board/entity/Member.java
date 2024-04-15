@@ -27,6 +27,10 @@ public class Member {
     private List<Board> boards = new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+
     public Member(String userId, String password, String username) {
         this.userId = userId;
         this.password = password;

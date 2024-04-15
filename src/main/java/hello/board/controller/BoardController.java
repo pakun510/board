@@ -2,6 +2,7 @@ package hello.board.controller;
 
 import hello.board.config.SessionUtils;
 import hello.board.controller.form.BoardSaveForm;
+import hello.board.controller.form.CommentSaveForm;
 import hello.board.dto.MemberSessionDto;
 import hello.board.entity.Board;
 import hello.board.repository.BoardRepository;
@@ -88,13 +89,14 @@ public class BoardController {
     public String board(@PathVariable("boardId") Long boardId, Model model, HttpServletResponse response) throws IOException {
 
         Optional<Board> findBoardOptional = boardRepository.findByIdJoinFetchMember(boardId);
-        if (findBoardOptional.isPresent()) {
-            model.addAttribute("board", findBoardOptional.get());
-            return "boards/board";
-        } else {
+        if (findBoardOptional.isEmpty()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
+
+        model.addAttribute("board", findBoardOptional.get());
+        model.addAttribute("comment", new CommentSaveForm());
+        return "boards/board";
     }
 
     @GetMapping("/{boardId}/edit")

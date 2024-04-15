@@ -26,7 +26,7 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "memberId")
     private Member member;
 
-    @OneToMany
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     //TODO 계층형은 아닌 관계 카테고리 구분
