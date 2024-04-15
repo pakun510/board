@@ -34,8 +34,21 @@
         </table>
     </div>
     <div>
+        <ul class="nav justify-content-between">
+            <li class="nav-item ms-5">
+                <form action th:action method="get">
+                    <input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="Search">
+                </form>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-primary" href="#" th:href="@{/boards/write}"
+                   role="button" th:text="#{button.write}">Write</a>
+            </li>
+        </ul>
+    </div>
+    <div>
         <div aria-label="Pagination" th:if="${totalPages > 0}">
-            <ul class="pagination justify-content-center">
+            <ul class="pagination justify-content-center mt-3">
                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                     <a th:replace="fragments/paging :: paging(1, '<<', 'First Page')"></a>
                 </li>
@@ -61,14 +74,7 @@
             </ul>
         </div>
     </div>
-    <div>
-        <ul class="nav justify-content-end">
-            <li class="nav-item">
-                <a class="btn btn-primary" href="#" th:href="@{/boards/write}"
-                   role="button" th:text="#{button.write}">Write</a>
-            </li>
-        </ul>
-    </div>
+
 </section>
 </body>
 </html>

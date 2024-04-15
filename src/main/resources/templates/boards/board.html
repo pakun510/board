@@ -13,8 +13,8 @@
             <div class="card-header">
                 <ul class="nav justify-content-between">
                     <li class="nav-item align-self-center" th:text="${board.title}">Board Title</li>
-                    <li class="nav-item">
-                        <a th:if="${board.member.id} == ${session.loginMember?.id}" class="btn btn-primary"
+                    <li class="nav-item" th:if="${board.member.id} == ${session.loginMember?.id}">
+                        <a class="btn btn-primary"
                            href="editForm.html" th:href="@{/boards/{boardId}/edit(boardId = ${board.id})}"
                            role="button">Update Board</a>
                     </li>
@@ -23,8 +23,16 @@
             <div class="card-body" th:text="${board.content}">
                 <p class="card-text">게시글 내용 Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque quisquam dolor voluptates quas quos minima dolores natus adipisci aliquid nulla!</p>
             </div>
-            <div class="card-footer text-muted" th:text="|작성자 ${board.member.username}|">
-                작성자: John Doe | 작성일: 2024-04-11
+            <div class="card-footer">
+                <ul class="nav justify-content-between">
+                    <li class="nav-item align-self-center text-muted" th:text="|작성자 ${board.member.username}|">작성자: John Doe | 작성일: 2024-04-11</li>
+                    <li class="nav-item" th:if="${board.member.id} == ${session.loginMember?.id}">
+                        <form action="../boards/boards.html" th:action="|@{/boards/{boardId}/delete(boardId=${board.id})}|" method="post">
+                            <button type="submit" class="btn btn-danger">Delete Board</button> <!--TODO action, href 수정필요. -->
+                        </form>
+                    </li>
+                </ul>
+
             </div>
         </div>
     </div>

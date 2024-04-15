@@ -5,25 +5,42 @@
     <title th:replace="${title}">레이아웃 타이틀</title>
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/earlyaccess/hannari.css" rel="stylesheet">
     <style>
         .field-error {
             border-color: #dc3545;
             color: #dc3545;
+        }
+        @font-face {
+            font-family: 'WavvePADO-Regular';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/WavvePADO-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .title {
+            margin: 0;
+            font-family: "WavvePADO-Regular";
         }
     </style>
 </head>
 <body>
 <div class="container">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="../boards/boards.html" th:href="@{/boards}" class="nav-link px-2 link-secondary">Home</a></li>
-            <li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
-            <li><a href="#" class="nav-link px-2 link-dark">Pricing</a></li>
-            <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
-            <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
-        </ul>
+        <div class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="../boards/boards.html" th:href="@{/boards}" class="nav-link px-2 link-secondary">Home</a></li>
+                <!--<li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
+                <li><a href="#" class="nav-link px-2 link-dark">Pricing</a></li>
+                <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
+                <li><a href="#" class="nav-link px-2 link-dark">About</a></li>-->
+            </ul>
+        </div>
+        <div class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <h1 class="title" th:text="#{label.main.title}">Main Title</h1>
+        </div>
 
-        <div class="d-flex justify-content-end">
+        <div class="col-md-3 d-flex justify-content-end">
             <th:block th:if="${session.loginMember == null}">
                 <button type="button" class="btn btn-outline-primary me-2" th:text="#{button.login}"
                         onclick="location.href='../login/loginForm.html'"

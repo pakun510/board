@@ -1,5 +1,6 @@
 package hello.board.controller;
 
+import hello.board.config.SessionUtils;
 import hello.board.controller.form.BoardSaveForm;
 import hello.board.dto.MemberSessionDto;
 import hello.board.entity.Board;
@@ -73,7 +74,7 @@ public class BoardController {
             return "boards/writeForm";
         }
 
-        MemberSessionDto memberSessionDto = getMemberSessionDto(request);
+        MemberSessionDto memberSessionDto = SessionUtils.getMemberSessionDto(request);
 
         log.info("success={}", form);
         Board savedBoard = boardService.saveBoard(memberSessionDto.getId(), form);
@@ -99,19 +100,7 @@ public class BoardController {
     @GetMapping("/{boardId}/edit")
     public String editForm(@PathVariable("boardId") Long boardId, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        Optional<Board> findBoardOptional = boardRepository.findByIdJoinFetchMember(boardId);
-        if (findBoardOptional.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
-        }
-
-        MemberSessionDto memberSessionDto = getMemberSessionDto(request);
-        Board findBoard = findBoardOptional.get();
-
-        if (!memberSessionDto.getId().equals(findBoard.getMember().getId())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return null;
-        }
+        Board findBoard = boardRepository.findByIdJoinFetchMember(boardId).get();
 
         model.addAttribute("board", findBoard);
         return "boards/editForm";
@@ -127,19 +116,6 @@ public class BoardController {
             log.info("errors={}", bindingResult);
             return "boards/editForm";
         }
-        Optional<Board> findBoardOptional = boardRepository.findByIdJoinFetchMember(boardId);
-        if (findBoardOptional.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
-        }
-
-        MemberSessionDto memberSessionDto = getMemberSessionDto(request);
-        Board findBoard = findBoardOptional.get();
-
-        if (!memberSessionDto.getId().equals(findBoard.getMember().getId())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return null;
-        }
 
         boardService.editBoard(boardId, form);
 
@@ -147,10 +123,16 @@ public class BoardController {
         return "redirect:/boards/{boardId}";
     }
 
-    private static MemberSessionDto getMemberSessionDto(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        return (MemberSessionDto) session.getAttribute(LOGIN_MEMBER);
+    @PostMapping("/{boardId}/delete")
+    public String deleteBoard(@PathVariable("boardId") Long boardId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        boardRepository.deleteById(boardId);
+
+        return "redirect:/boards";
     }
+
+
+
 
 
     //TODO 지도API, 이미지,
