@@ -23,8 +23,4 @@ public class BoardSaveForm {
 
     private List<MultipartFile> imageFiles;
 
-    public BoardSaveForm(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
 }

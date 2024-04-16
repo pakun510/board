@@ -3,6 +3,7 @@ package hello.board.controller;
 import hello.board.config.SessionUtils;
 import hello.board.controller.form.BoardSaveForm;
 import hello.board.controller.form.CommentSaveRequest;
+import hello.board.dto.BoardDto;
 import hello.board.dto.MemberSessionDto;
 import hello.board.entity.Board;
 import hello.board.repository.BoardRepository;
@@ -36,9 +37,6 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final BoardService boardService;
 
-    @Value("${file.dir}")
-    private String fileDir;
-
     @GetMapping
     public String boards(Model model,
                          @RequestParam(name = "keyword", required = false) String keyword,
@@ -65,7 +63,7 @@ public class BoardController {
         return "boards/writeForm";
     }
 
-//    @PostMapping("/write")
+    @PostMapping("/write")
     public String writeBoard(@Validated @ModelAttribute("board") BoardSaveForm form, BindingResult bindingResult,
                              RedirectAttributes redirectAttributes, HttpServletRequest request) throws IOException {
         if (bindingResult.hasErrors()) {
@@ -82,20 +80,7 @@ public class BoardController {
         return "redirect:/boards/{boardId}";
 
     }
-    @PostMapping("/test")
-    public String writeBoardTest(@Validated @ModelAttribute("board") BoardSaveForm form, BindingResult bindingResult, HttpServletRequest request) throws IOException {
-        if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            return "boards/writeForm";
-        }
 
-        MemberSessionDto memberSessionDto = SessionUtils.getMemberSessionDto(request);
-        log.info("success={}", form);
-        Board savedBoard = boardService.saveBoard(memberSessionDto.getId(), form);
-
-        return "redirect:/";
-
-    }
 
     @GetMapping("/{boardId}")
     public String board(@PathVariable("boardId") Long boardId, Model model, HttpServletResponse response) throws IOException {
@@ -107,10 +92,10 @@ public class BoardController {
         }
 
         model.addAttribute("board", findBoardOptional.get());
-        model.addAttribute("comment", new CommentSaveRequest());
         return "boards/board";
     }
 
+    //TODO 개행문자 처리
     @GetMapping("/{boardId}/edit")
     public String editForm(@PathVariable("boardId") Long boardId, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 

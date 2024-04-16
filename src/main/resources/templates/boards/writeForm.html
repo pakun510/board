@@ -10,7 +10,7 @@
     <div class="py-5 text-center">
         <h2>글 작성</h2>
     </div>
-    <form action="board.html" th:action="@{/boards/test}" th:object="${board}" method="post" enctype="multipart/form-data">
+    <form action="board.html" th:action th:object="${board}" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="title" class="form-label" th:text="#{label.board.title}">title</label>
             <input type="text" class="form-control" id="title" th:field="*{title}">
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="mb-3">
-            <label for="imageFiles" class="form-label" th:text="#{label.board.title}">title</label>
+            <label for="imageFiles" class="form-label" th:text="#{label.board.image}">file</label>
             <input type="file" multiple class="form-control" id="imageFiles" th:field="*{imageFiles}">
         </div>
         <div class="mb-3">

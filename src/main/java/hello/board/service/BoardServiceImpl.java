@@ -27,19 +27,18 @@ public class BoardServiceImpl implements BoardService {
     private final MemberRepository memberRepository;
     private final BoardFileService boardFileService;
 
-    @Value("${file.dir}")
-    private String fileDir;
-
-    public String getFullPath(String filename) {
-        return fileDir + filename;
+    public String escapeContentText(String content) {
+        String escapeText = content.replace("<", "&lt").replace(">", "&gt");
+        return escapeText.replace("\r\n", "<br>");
     }
+
 
     @Override
     @Transactional
     public Board saveBoard(Long memberId, BoardSaveForm form) throws IOException {
 
         Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
-        Board board = new Board(form.getTitle(), form.getContent());
+        Board board = new Board(form.getTitle(), escapeContentText(form.getContent()));
         List<BoardFile> boardFiles = boardFileService.saveFiles(form.getImageFiles());
         for (BoardFile boardFile : boardFiles) {
             board.addFile(boardFile);
@@ -54,7 +53,7 @@ public class BoardServiceImpl implements BoardService {
     public void editBoard(Long boardId, BoardSaveForm form) {
 
         Board board = boardRepository.findById(boardId).orElseThrow(IllegalArgumentException::new);
-        board.edit(form.getTitle(), form.getContent());
+        board.edit(form.getTitle(), escapeContentText(form.getContent()));
 
     }
 
