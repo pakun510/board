@@ -2,31 +2,30 @@ package hello.board.controller;
 
 import hello.board.config.SessionUtils;
 import hello.board.controller.form.BoardSaveForm;
-import hello.board.controller.form.CommentSaveForm;
+import hello.board.controller.form.CommentSaveRequest;
 import hello.board.dto.MemberSessionDto;
 import hello.board.entity.Board;
 import hello.board.repository.BoardRepository;
 import hello.board.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
-
-import static hello.board.config.SessionConst.LOGIN_MEMBER;
 
 @Slf4j
 @Controller
@@ -37,14 +36,14 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final BoardService boardService;
 
+    @Value("${file.dir}")
+    private String fileDir;
+
     @GetMapping
     public String boards(Model model,
                          @RequestParam(name = "keyword", required = false) String keyword,
                          @RequestParam(name = "page", defaultValue = "1") int page,
                          @RequestParam(name = "size", defaultValue = "10") int size) {
-        log.info("keyword={}", keyword);
-        log.info("page={}", page);
-        log.info("size={}", size);
 
         //TODO 제목만 검색은 완료, A 또는 B 검색 수정필요
         Pageable pageable = PageRequest.of(page - 1, size);
@@ -56,7 +55,6 @@ public class BoardController {
         model.addAttribute("totalItems", boardPage.getTotalElements());
         model.addAttribute("totalPages", boardPage.getTotalPages());
         model.addAttribute("pageSize", size);
-        //TODO 날짜 포맷팅해야함.
         return "boards/boards";
     }
 
@@ -67,9 +65,9 @@ public class BoardController {
         return "boards/writeForm";
     }
 
-    @PostMapping("/write")
+//    @PostMapping("/write")
     public String writeBoard(@Validated @ModelAttribute("board") BoardSaveForm form, BindingResult bindingResult,
-                             RedirectAttributes redirectAttributes, HttpServletRequest request) {
+                             RedirectAttributes redirectAttributes, HttpServletRequest request) throws IOException {
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "boards/writeForm";
@@ -84,6 +82,20 @@ public class BoardController {
         return "redirect:/boards/{boardId}";
 
     }
+    @PostMapping("/test")
+    public String writeBoardTest(@Validated @ModelAttribute("board") BoardSaveForm form, BindingResult bindingResult, HttpServletRequest request) throws IOException {
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            return "boards/writeForm";
+        }
+
+        MemberSessionDto memberSessionDto = SessionUtils.getMemberSessionDto(request);
+        log.info("success={}", form);
+        Board savedBoard = boardService.saveBoard(memberSessionDto.getId(), form);
+
+        return "redirect:/";
+
+    }
 
     @GetMapping("/{boardId}")
     public String board(@PathVariable("boardId") Long boardId, Model model, HttpServletResponse response) throws IOException {
@@ -95,7 +107,7 @@ public class BoardController {
         }
 
         model.addAttribute("board", findBoardOptional.get());
-        model.addAttribute("comment", new CommentSaveForm());
+        model.addAttribute("comment", new CommentSaveRequest());
         return "boards/board";
     }
 

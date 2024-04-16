@@ -33,4 +33,7 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "boardId")
     private Board board;
 
+    public Comment(String content) {
+        this.content = content;
+    }
 }

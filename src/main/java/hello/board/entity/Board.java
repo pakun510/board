@@ -27,6 +27,9 @@ public class Board extends BaseEntity {
     private Member member;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardFile> boardFiles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     //TODO 계층형은 아닌 관계 카테고리 구분
@@ -41,6 +44,17 @@ public class Board extends BaseEntity {
         this.title = title;
         this.content = content;
     }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setBoard(this);
+    }
+
+    public void addFile(BoardFile boardFile) {
+        boardFiles.add(boardFile);
+        boardFile.setBoard(this);
+    }
+
 
 
 }

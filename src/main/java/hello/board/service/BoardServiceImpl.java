@@ -2,13 +2,20 @@ package hello.board.service;
 
 import hello.board.controller.form.BoardSaveForm;
 import hello.board.entity.Board;
+import hello.board.entity.BoardFile;
 import hello.board.entity.Member;
 import hello.board.repository.BoardRepository;
 import hello.board.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,13 +25,25 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+    private final BoardFileService boardFileService;
+
+    @Value("${file.dir}")
+    private String fileDir;
+
+    public String getFullPath(String filename) {
+        return fileDir + filename;
+    }
 
     @Override
     @Transactional
-    public Board saveBoard(Long memberId, BoardSaveForm form) {
+    public Board saveBoard(Long memberId, BoardSaveForm form) throws IOException {
 
         Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
         Board board = new Board(form.getTitle(), form.getContent());
+        List<BoardFile> boardFiles = boardFileService.saveFiles(form.getImageFiles());
+        for (BoardFile boardFile : boardFiles) {
+            board.addFile(boardFile);
+        }
         member.writeBoard(board);
 
         return boardRepository.save(board);

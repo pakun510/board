@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="~{layout/layoutFile :: layout(~{::title}, ~{::section})}"
+<html th:replace="~{layout/layoutFileWithJs :: layout(~{::title}, ~{::section}, ~{::script})}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
@@ -68,14 +68,18 @@
                 <div class="form-group mt-2">
                     <ul class="nav justify-content-end">
                         <li class="nav-item">
-                            <button type="submit" class="btn btn-primary">댓글 작성</button>
+                            <button type="button" class="btn btn-primary">댓글 작성</button>
                         </li>
                     </ul>
                 </div>
-
             </form>
         </div>
     </div>
 </section>
+<!--TODO 댓글 fetch 구현해야함.-->
+<script th:inline="javascript">
+
+
+</script>
 </body>
 </html>

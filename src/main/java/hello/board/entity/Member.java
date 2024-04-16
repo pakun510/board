@@ -42,5 +42,9 @@ public class Member {
         board.setMember(this);
     }
 
+    public void writeComment(Comment comment) {
+        comments.add(comment);
+        comment.setMember(this);
+    }
 
 }
