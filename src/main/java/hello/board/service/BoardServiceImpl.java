@@ -8,12 +8,9 @@ import hello.board.repository.BoardRepository;
 import hello.board.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -25,13 +22,12 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
-    private final BoardFileService boardFileService;
+    private final FileService fileService;
 
     public String escapeContentText(String content) {
         String escapeText = content.replace("<", "&lt").replace(">", "&gt");
         return escapeText.replace("\r\n", "<br>");
     }
-
 
     @Override
     @Transactional
@@ -39,7 +35,7 @@ public class BoardServiceImpl implements BoardService {
 
         Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
         Board board = new Board(form.getTitle(), escapeContentText(form.getContent()));
-        List<BoardFile> boardFiles = boardFileService.saveFiles(form.getImageFiles());
+        List<BoardFile> boardFiles = fileService.saveBoardFiles(form.getImageFiles());
         for (BoardFile boardFile : boardFiles) {
             board.addFile(boardFile);
         }

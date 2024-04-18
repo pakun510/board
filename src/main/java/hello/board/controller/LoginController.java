@@ -35,7 +35,7 @@ public class LoginController {
         if (bindingResult.hasErrors()) {
             return "login/loginForm";
         }
-        //TODO 나중에 구현할것. 뭐를?
+
         MemberSessionDto loginMember = loginService.tryLogin(form);
         if (loginMember == null) {
             bindingResult.reject("loginFail");

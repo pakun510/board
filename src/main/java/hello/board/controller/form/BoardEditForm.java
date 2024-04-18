@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardSaveForm {
+public class BoardEditForm {
 
     @NotBlank
     @Length(min = 2, max = 20)
@@ -20,11 +20,4 @@ public class BoardSaveForm {
 
     @NotBlank
     private String content;
-
-    private List<MultipartFile> imageFiles;
-
-    public BoardSaveForm(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
 }

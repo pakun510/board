@@ -22,13 +22,13 @@
             </div>
             <div class="card-body">
                 <!-- 프로필 이미지 -->
-                <img src="https://via.placeholder.com/150" alt="Profile Image" class="profile-image mb-3">
+                <!--TODO 프로필 이미지 나오게 수정-->
+                <img src="https://via.placeholder.com/150"
+                     th:src=""
+                     alt="Profile Image" class="profile-image mb-3">
                 <!-- 유저 정보 -->
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item" th:text="|Name: ${member.username}|">Name: John Doe</li>
-                    <li class="list-group-item">Email: johndoe@example.com</li>
-                    <li class="list-group-item">Phone: +1234567890</li>
-                    <li class="list-group-item">Address: 123 Main St, City, Country</li>
                 </ul>
             </div>
         </div>

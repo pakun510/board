@@ -11,4 +11,8 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
 
     @Query("select b from Board b join fetch b.member  where b.id = :boardId")
     Optional<Board> findByIdJoinFetchMember(@Param("boardId") Long boardId);
+
+    @Query("select b from Board b join fetch b.member left join fetch b.boardFiles where b.id = :boardId")
+    Optional<Board> findByIdJoinFetchMemberAndFiles(@Param("boardId") Long boardId);
+
 }

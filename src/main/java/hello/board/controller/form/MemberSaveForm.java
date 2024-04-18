@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -20,6 +21,8 @@ public class MemberSaveForm {
     private String confirmPassword;
     @NotBlank
     private String username;
+
+    private MultipartFile profileImage;
 
     public boolean passwordNotEqualsConfirm() {
         return !password.equals(confirmPassword);

@@ -38,7 +38,7 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public String joinMember(@Validated @ModelAttribute("member") MemberSaveForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String joinMember(@Validated @ModelAttribute("member") MemberSaveForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException {
         if (form.passwordNotEqualsConfirm()) {
             //TODO 메세지 국제화 수정, 입력한 데이터 다시 리턴 수정
             bindingResult.addError(new FieldError("member", "confirmPassword", "비밀번호가 일치하지 않습니다."));

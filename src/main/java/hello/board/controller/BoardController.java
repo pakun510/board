@@ -1,18 +1,19 @@
 package hello.board.controller;
 
 import hello.board.config.SessionUtils;
+import hello.board.controller.form.BoardEditForm;
 import hello.board.controller.form.BoardSaveForm;
-import hello.board.controller.form.CommentSaveRequest;
-import hello.board.dto.BoardDto;
 import hello.board.dto.MemberSessionDto;
 import hello.board.entity.Board;
 import hello.board.repository.BoardRepository;
+import hello.board.service.FileService;
 import hello.board.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +22,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.List;
+import java.net.MalformedURLException;
 import java.util.Optional;
 
 @Slf4j
@@ -36,6 +36,7 @@ public class BoardController {
 
     private final BoardRepository boardRepository;
     private final BoardService boardService;
+    private final FileService fileService;
 
     @GetMapping
     public String boards(Model model,
@@ -85,7 +86,7 @@ public class BoardController {
     @GetMapping("/{boardId}")
     public String board(@PathVariable("boardId") Long boardId, Model model, HttpServletResponse response) throws IOException {
 
-        Optional<Board> findBoardOptional = boardRepository.findByIdJoinFetchMember(boardId);
+        Optional<Board> findBoardOptional = boardRepository.findByIdJoinFetchMemberAndFiles(boardId);
         if (findBoardOptional.isEmpty()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return null;
@@ -95,13 +96,13 @@ public class BoardController {
         return "boards/board";
     }
 
-    //TODO 개행문자 처리
     @GetMapping("/{boardId}/edit")
-    public String editForm(@PathVariable("boardId") Long boardId, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String editForm(@PathVariable("boardId") Long boardId, Model model) {
 
-        Board findBoard = boardRepository.findByIdJoinFetchMember(boardId).get();
+        Board findBoard = boardRepository.findById(boardId).get();
+        BoardEditForm boardEditForm = new BoardEditForm(findBoard.getTitle(), findBoard.getContent().replace("<br>", "\r\n"));
 
-        model.addAttribute("board", findBoard);
+        model.addAttribute("board", boardEditForm);
         return "boards/editForm";
     }
 
@@ -109,7 +110,7 @@ public class BoardController {
 
     @PostMapping("/{boardId}/edit")
     public String editBoard(@PathVariable("boardId") Long boardId, @Validated @ModelAttribute("board") BoardSaveForm form, BindingResult bindingResult,
-                            RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) throws IOException {
+                            RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
@@ -123,16 +124,21 @@ public class BoardController {
     }
 
     @PostMapping("/{boardId}/delete")
-    public String deleteBoard(@PathVariable("boardId") Long boardId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String deleteBoard(@PathVariable("boardId") Long boardId) {
 
         boardRepository.deleteById(boardId);
 
         return "redirect:/boards";
     }
 
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource downloadImage(@PathVariable("filename") String filename) throws MalformedURLException {
+        String path = "file:" + fileService.getFullPath(filename);
+        log.info("filePath = {}", path);
+        return new UrlResource(path);
+    }
 
 
-
-
-    //TODO 지도API, 이미지,
+    //TODO 지도API
 }

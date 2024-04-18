@@ -22,7 +22,7 @@
             </div>
             <div class="card-body">
                 <div class="card-text">
-                    <!--TODO 여기에 이미지 캐러셀 -->
+                    <img th:each="boardFile : ${board.boardFiles}" class="d-block w-30" th:src="|/boards/images/${boardFile.storeFileName}|"/>
                     <p class="m-0" th:utext="${board.content}">게시글 내용</p>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                     <li class="nav-item align-self-center text-muted" th:text="|작성자 ${board.member.username}|">작성자: John Doe | 작성일: 2024-04-11</li>
                     <li class="nav-item" th:if="${board.member.id} == ${session.loginMember?.id}">
                         <form action="../boards/boards.html" th:action="|@{/boards/{boardId}/delete(boardId=${board.id})}|" method="post">
-                            <button type="submit" class="btn btn-danger">Delete Board</button> <!--TODO action, href 수정필요. -->
+                            <button type="submit" class="btn btn-danger">Delete Board</button>
                         </form>
                     </li>
                 </ul>

@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +17,7 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final FileService fileService;
 
     @Override
     public boolean existsMember(String userId) {
@@ -25,13 +26,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void joinMember(MemberSaveForm form) {
-        Member savedMember = memberRepository.save(new Member(form.getUserId(), form.getPassword(), form.getUsername()));
+    public void joinMember(MemberSaveForm form) throws IOException {
+        memberRepository.save(new Member(form.getUserId(), form.getPassword(), form.getUsername(),
+                form.getProfileImage().getOriginalFilename(),
+                fileService.saveFileReturnStoreFileName(form.getProfileImage())));
     }
 
-    @Override
-    public Optional<Member> findUserByUserId(Long userId) {
-        //바로 memberRepository 로 접근하는게 더 나은 방법일수도.
-        return memberRepository.findById(userId);
-    }
 }

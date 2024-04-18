@@ -23,6 +23,9 @@ public class Member {
     private String password;
     private String username;
 
+    private String uploadProfileFileName;
+    private String storeProfileFileName;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boards = new ArrayList<>();
 
@@ -30,11 +33,18 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-
     public Member(String userId, String password, String username) {
         this.userId = userId;
         this.password = password;
         this.username = username;
+    }
+
+    public Member(String userId, String password, String username, String uploadProfileFileName, String storeProfileFileName) {
+        this.userId = userId;
+        this.password = password;
+        this.username = username;
+        this.uploadProfileFileName = uploadProfileFileName;
+        this.storeProfileFileName = storeProfileFileName;
     }
 
     public void writeBoard(Board board) {

@@ -12,30 +12,32 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class BoardFileServiceImpl implements BoardFileService {
+public class FileServiceImpl implements FileService {
 
     @Value("${file.dir}")
     private String fileDir;
 
+
+    @Override
     public String getFullPath(String filename) {
         return fileDir + filename;
     }
 
     @Override
-    public List<BoardFile> saveFiles(List<MultipartFile> imageFiles) throws IOException {
+    public List<BoardFile> saveBoardFiles(List<MultipartFile> imageFiles) throws IOException {
 
         List<BoardFile> boardFiles = new ArrayList<>();
 
         for (MultipartFile imageFile : imageFiles) {
             if (!imageFile.isEmpty()) {
-                boardFiles.add(saveFile(imageFile));
+                boardFiles.add(new BoardFile(imageFile.getOriginalFilename(), saveFileReturnStoreFileName(imageFile)));
             }
         }
 
         return boardFiles;
     }
 
-    public BoardFile saveFile(MultipartFile imageFile) throws IOException {
+    public String saveFileReturnStoreFileName(MultipartFile imageFile) throws IOException {
         if (imageFile.isEmpty()) {
             return null;
         }
@@ -44,9 +46,10 @@ public class BoardFileServiceImpl implements BoardFileService {
         String storeFileName = createStoreFileName(originalFilename);
         imageFile.transferTo(new File(getFullPath(storeFileName)));
 
-        return new BoardFile(originalFilename, storeFileName);
-
+        return storeFileName;
     }
+
+
 
     private String createStoreFileName(String originalFilename) {
         String uuid = UUID.randomUUID().toString();
@@ -58,4 +61,6 @@ public class BoardFileServiceImpl implements BoardFileService {
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
     }
+
+
 }

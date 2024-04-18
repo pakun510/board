@@ -12,13 +12,17 @@
             <h2>회원 가입</h2>
         </div>
         <h4 class="mb-3">회원 정보 입력</h4>
-        <form action="#" th:action th:object="${member}" method="post">
+        <form action="#" th:action th:object="${member}" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="username" class="form-label" th:text="#{label.member.username}">username</label>
                 <input type="text" class="form-control" id="username" th:field="*{username}">
                 <div class="field-error" th:errors="*{username}">
                     내용 오류
                 </div>
+            </div>
+            <div class="mb-3">
+                <label for="profileImage" class="form-label">profileImage</label>
+                <input type="file" class="form-control" id="profileImage" th:field="*{profileImage}">
             </div>
             <div class="mb-3">
                 <label for="userId" class="form-label" th:text="#{label.member.userId}">userId</label>

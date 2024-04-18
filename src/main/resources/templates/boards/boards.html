@@ -18,12 +18,6 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
             <tr th:each="board : ${boards}">
                 <th th:text="${board.id}"></th>
                 <td><a href="board.html" th:href="@{/boards/{boardId}(boardId = ${board.id})}" th:text="${board.title}">title</a></td>
