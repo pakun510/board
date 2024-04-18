@@ -28,6 +28,9 @@
         <div class="mb-3">
             <label for="imageFiles" class="form-label" th:text="#{label.board.image}">file</label>
             <input type="file" multiple class="form-control" id="imageFiles" th:field="*{imageFiles}">
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
+            </div>
         </div>
         <div class="mb-3">
             <ul class="nav justify-content-end">

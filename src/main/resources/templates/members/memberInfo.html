@@ -23,9 +23,8 @@
             <div class="card-body">
                 <!-- 프로필 이미지 -->
                 <!--TODO 프로필 이미지 나오게 수정-->
-                <img src="https://via.placeholder.com/150"
-                     th:src=""
-                     alt="Profile Image" class="profile-image mb-3">
+                <img th:if="${member.storeProfileFileName} == null" src="https://via.placeholder.com/150" alt="Profile Image" class="profile-image mb-3">
+                <img th:if="${member.storeProfileFileName} != null" th:src="|/boards/images/${member.storeProfileFileName}|" width="150px" alt="Profile Image" class="profile-image mb-3">
                 <!-- 유저 정보 -->
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item" th:text="|Name: ${member.username}|">Name: John Doe</li>

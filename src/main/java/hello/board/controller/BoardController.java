@@ -22,10 +22,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -37,6 +39,7 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final BoardService boardService;
     private final FileService fileService;
+    private final FileValidator fileValidator;
 
     @GetMapping
     public String boards(Model model,
@@ -67,6 +70,13 @@ public class BoardController {
     @PostMapping("/write")
     public String writeBoard(@Validated @ModelAttribute("board") BoardSaveForm form, BindingResult bindingResult,
                              RedirectAttributes redirectAttributes, HttpServletRequest request) throws IOException {
+        for (MultipartFile imageFile : form.getImageFiles()) {
+            log.info("ContentType = {}", imageFile.getContentType());
+            if(!fileValidator.isSupportedContentType(imageFile.getContentType())) {
+                bindingResult.reject("supportImage");
+                break;
+            }
+        }
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "boards/writeForm";

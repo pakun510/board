@@ -21,8 +21,11 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label for="profileImage" class="form-label">profileImage</label>
+                <label for="profileImage" class="form-label" th:text="|#{label.member.profile} #{label.board.image}|">profileImage</label>
                 <input type="file" class="form-control" id="profileImage" th:field="*{profileImage}">
+                <div th:if="${#fields.hasGlobalErrors()}">
+                    <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="userId" class="form-label" th:text="#{label.member.userId}">userId</label>

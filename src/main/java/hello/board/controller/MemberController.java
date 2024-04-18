@@ -31,6 +31,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberRepository memberRepository;
+    private final FileValidator fileValidator;
 
     @GetMapping("/join")
     public String joinForm(@ModelAttribute("member") MemberSaveForm form) {
@@ -47,7 +48,12 @@ public class MemberController {
             //TODO 메세지 국제화 수정, 입력한 데이터 다시 리턴 수정
             bindingResult.addError(new FieldError("member", "userId", "이미 존재하는 아이디입니다."));
         }
-
+        if (!form.getProfileImage().isEmpty()) {
+            log.info("ContentType = {}", form.getProfileImage().getContentType());
+            if (!fileValidator.isSupportedContentType(form.getProfileImage().getContentType())) {
+                bindingResult.reject("supportImage");
+            }
+        }
         if (bindingResult.hasErrors()) {
             return "members/joinForm";
         }
@@ -62,13 +68,14 @@ public class MemberController {
         log.info("userId={}", userId);
 
         Optional<Member> findMember = memberRepository.findById(userId);
-        if (findMember.isPresent()) {
-            model.addAttribute("member", findMember.get());
-            return "members/memberInfo";
-        } else {
+        if (findMember.isEmpty()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
+
+        model.addAttribute("member", findMember.get());
+        return "members/memberInfo";
+
 
     }
 
