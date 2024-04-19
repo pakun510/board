@@ -5,6 +5,7 @@ import hello.board.controller.form.LoginForm;
 import hello.board.dto.MemberSessionDto;
 import hello.board.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -25,13 +28,13 @@ public class LoginController {
 
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("member") LoginForm form) {
-
         return "login/loginForm";
     }
 
     @PostMapping("/login")
     public String login(@Validated @ModelAttribute("member") LoginForm form, BindingResult bindingResult, HttpServletRequest request,
                         @RequestParam(value = "redirectURL", defaultValue = "/") String redirectURL) {
+
         if (bindingResult.hasErrors()) {
             return "login/loginForm";
         }

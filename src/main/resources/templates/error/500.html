@@ -7,6 +7,18 @@
 </head>
 <body>
 <section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 error-container">
+                <div class="bordered-box">
+                    <h1 th:text="#{errors.header}">에러 발생!</h1>
+                    <p th:text="#{errors.body.500}">죄송합니다, 서버에서 문제가 발생했습니다. 다시 시도해주세요.</p>
+                    <p th:text="#{error.customerService}">문제가 지속될 경우 고객센터에 문의 바랍니다.</p>
+                    <a href="메인홈페이지주소" th:href="@{/boards}" class="btn btn-primary">메인 홈페이지로 이동</a>
+                </div>
+            </div>
+        </div>
+    </div>
 <!--TODO 화면 꾸미고 홈으로 가는 링크나 버튼 달아두기-->
 500 서버 에러 페이지
 </section>

@@ -71,10 +71,12 @@ public class BoardController {
     public String writeBoard(@Validated @ModelAttribute("board") BoardSaveForm form, BindingResult bindingResult,
                              RedirectAttributes redirectAttributes, HttpServletRequest request) throws IOException {
         for (MultipartFile imageFile : form.getImageFiles()) {
-            log.info("ContentType = {}", imageFile.getContentType());
-            if(!fileValidator.isSupportedContentType(imageFile.getContentType())) {
-                bindingResult.reject("supportImage");
-                break;
+            if (!imageFile.isEmpty()) {
+                log.info("ContentType = {}", imageFile.getContentType());
+                if(!fileValidator.isSupportedContentType(imageFile.getContentType())) {
+                    bindingResult.reject("supportImage");
+                    break;
+                }
             }
         }
         if (bindingResult.hasErrors()) {

@@ -33,7 +33,7 @@
             <li class="nav-item">
                 <form class="d-flex" action th:action method="get">
                     <input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="Search">
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="submit" class="btn btn-primary" th:text="#{button.search}" style="width: 5rem">Search</button>
                 </form>
             </li>
             <li class="nav-item col-md-3 d-flex justify-content-end">
