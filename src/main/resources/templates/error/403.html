@@ -13,7 +13,7 @@
                 <div class="bordered-box">
                     <h1 th:text="#{errors.header}">에러 발생!</h1>
                     <p th:text="#{errors.body.403}">죄송합니다, 요청하신 페이지에 대한 권한이 없습니다.</p>
-                    <a href="메인홈페이지주소" th:href="@{/boards}" class="btn btn-primary">메인 홈페이지로 이동</a>
+                    <a href="메인홈페이지주소" th:href="@{/boards}" class="btn btn-primary" th:text="#{button.href.home}">메인 홈페이지로 이동</a>
                 </div>
             </div>
         </div>

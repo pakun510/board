@@ -16,7 +16,7 @@
                     <li class="nav-item" th:if="${board.member.id} == ${session.loginMember?.id}">
                         <a class="btn btn-primary"
                            href="editForm.html" th:href="@{/boards/{boardId}/edit(boardId = ${board.id})}"
-                           role="button">Update Board</a>
+                           th:text="#{button.edit}" role="button">Update Board</a>
                     </li>
                 </ul>
             </div>
@@ -50,7 +50,7 @@
                     <li class="nav-item align-self-center text-muted" th:text="|작성자 ${board.member.username}|">작성자: John Doe | 작성일: 2024-04-11</li>
                     <li class="nav-item" th:if="${board.member.id} == ${session.loginMember?.id}">
                         <form action="../boards/boards.html" th:action="|@{/boards/{boardId}/delete(boardId=${board.id})}|" method="post">
-                            <button type="submit" class="btn btn-danger">Delete Board</button>
+                            <button type="submit" class="btn btn-danger" th:text="#{button.delete}">Delete Board</button>
                         </form>
                     </li>
                 </ul>
