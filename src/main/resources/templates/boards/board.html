@@ -22,7 +22,7 @@
             </div>
             <div class="card-body">
                 <div class="card-text">
-                    <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                    <div id="carouselExampleDark" th:if="${!#lists.isEmpty(board.boardFiles)}" class="carousel carousel-dark slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
                             <th:block th:each="boardFile : ${board.boardFiles}">
                                 <div th:if="${boardFileStat.index} == 0" class="carousel-item active" data-bs-interval="3000">
