@@ -32,4 +32,6 @@ public class MemberServiceImpl implements MemberService {
                 fileService.saveFileReturnStoreFileName(form.getProfileImage())));
     }
 
+
+
 }

@@ -11,4 +11,5 @@ public interface MemberService {
     boolean existsMember(String userId);
     void joinMember(MemberSaveForm form) throws IOException;
 
+
 }

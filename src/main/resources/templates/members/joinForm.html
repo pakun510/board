@@ -9,9 +9,9 @@
 <section>
     <div class="mx-auto col-4">
         <div class="py-5 text-center">
-            <h2>회원 가입</h2>
+            <h2 th:text="#{button.sign-up}">회원 가입</h2>
         </div>
-        <h4 class="mb-3">회원 정보 입력</h4>
+        <h4 class="mb-3" th:text="#{label.member.input}">회원 정보 입력</h4>
         <form action="#" th:action th:object="${member}" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="username" class="form-label" th:text="#{label.member.username}">username</label>

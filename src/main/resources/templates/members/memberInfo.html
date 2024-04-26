@@ -16,7 +16,7 @@
                     <li class="nav-item">
                         <a th:if="${member.id} == ${session.loginMember?.id}" class="btn btn-primary"
                            href="memberInfo.html" th:href="@{/member/details}"
-                           role="button">Update Profile</a>
+                           role="button" th:text="|#{label.member.profile} #{button.edit}|">Update Profile</a>
                     </li>
                 </ul>
             </div>
